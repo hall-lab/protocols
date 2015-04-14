@@ -1,7 +1,7 @@
 ## GTEx WGS BAM realignment
 2015-03-18
 
-```
+```bash
 pwd
 # /gscmnt/gc2802/halllab/gtex_realign_2015-03-16
 
