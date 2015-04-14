@@ -6,6 +6,9 @@
 pwd
 # /gscmnt/gc2802/halllab/gtex_realign_2015-03-16
 
+# ----------------------------------------
+# 1. Create the sample map (batch1.txt)
+# ----------------------------------------
 # batch 1: 80 samples
 # make the batch
 for BAMPATH in `ls /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/original/*.bam | head -n 80`
@@ -27,6 +30,10 @@ head $BATCH
 # GTEX-O5YV-0004-SM-5JK2N   /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/original/GTEX-O5YV-0004-SM-5JK2N.bam
 # GTEX-O5YW-0003-SM-5JK2Y   /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/original/GTEX-O5YW-0003-SM-5JK2Y.bam
 
+# ----------------------------------------
+# 2. Create directory for each sample
+# ----------------------------------------
+
 # make some directory paths
 for SAMPLE in `cat $BATCH | cut -f 1`
 do
@@ -45,20 +52,10 @@ do
     cd -
 done
 
-# flagstat the original BAM files
-for SAMPLE in `cat $BATCH | cut -f 1`
-do
-    echo $SAMPLE
-    bomb \
-        -m 1 \
-        -J $SAMPLE.flag \
-        -g /cchiang/flagstat \
-        -o /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/log/$SAMPLE.original.flagstat.%J.log \
-        -e /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/log/$SAMPLE.original.flagstat.%J.log \
-        "samtools-1.1 flagstat /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/qc/original.bam > /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/qc/original.bam.flagstat"
-done
+# ----------------------------------------
+# 3. Realign the BAM files
+# ----------------------------------------
 
-# realign the files
 # speedseq commit: a076a6201d9966ccc176a1118927891c197e491d
 for SAMPLE in `cat $BATCH | cut -f 1`
 do
@@ -80,7 +77,24 @@ do
             /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/qc/original.bam"
 done
 
-# flagstat the realignments
+# ----------------------------------------
+# 4. Flagstat the original BAM files
+# ----------------------------------------
+for SAMPLE in `cat $BATCH | cut -f 1`
+do
+    echo $SAMPLE
+    bomb \
+        -m 1 \
+        -J $SAMPLE.flag \
+        -g /cchiang/flagstat \
+        -o /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/log/$SAMPLE.original.flagstat.%J.log \
+        -e /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/log/$SAMPLE.original.flagstat.%J.log \
+        "samtools-1.1 flagstat /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/qc/original.bam > /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/qc/original.bam.flagstat"
+done
+
+# ----------------------------------------
+# 5. Flagstat the realigned BAM files
+# ----------------------------------------
 for SAMPLE in `cat $BATCH | cut -f 1`
 do
     echo $SAMPLE
@@ -93,7 +107,9 @@ do
         "samtools-1.1 flagstat /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam > /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam.flagstat"
 done
 
-# check the flagstats
+# ----------------------------------------
+# 6. Compare the original and realigned flagstats
+# ----------------------------------------
 for SAMPLE in `cat $BATCH | cut -f 1`
 do
     REALIGN_PAIRED=`cat /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam.flagstat | grep -m 1 "paired in sequencing" | awk '{ print $1+$3 }'`    
@@ -106,7 +122,10 @@ do
     echo -e "$SAMPLE\t$REALIGN_PAIRED\t$ORIG_PAIRED\t$DIFF\t$READ_LENGTH\t$COV"
 done > /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/notes/batch1/flagstat_qc.txt
 
-# remove the original BAMs for completed samples
+# ----------------------------------------
+# 7. Remove the original BAMs for completed samples
+# ----------------------------------------
+# Warning: use caution when deleting files
 FLAGSTAT_QC=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/notes/batch1/flagstat_qc.txt
 for SAMPLE in `cat $FLAGSTAT_QC | awk '{ if ($2==$3) print $1 }'`
 do
