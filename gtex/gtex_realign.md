@@ -1,7 +1,8 @@
 ## GTEx WGS BAM realignment
-2015-03-18
 
 ```bash
+# 2015-03-18
+
 pwd
 # /gscmnt/gc2802/halllab/gtex_realign_2015-03-16
 
@@ -98,17 +99,15 @@ do
     REALIGN_PAIRED=`cat /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam.flagstat | grep -m 1 "paired in sequencing" | awk '{ print $1+$3 }'`    
     ORIG_PAIRED=`cat /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/qc/original.bam.flagstat | grep -m 1 "paired in sequencing" | awk '{ print $1+$3 }'`
     DIFF=$(( $REALIGN_PAIRED - $ORIG_PAIRED ))
-    
     READ_LENGTH=`sambamba view /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam | head -n 10000 | awk 'BEGIN { MAX_LEN=0 } { LEN=length($10); if (LEN>MAX_LEN) MAX_LEN=LEN } END { print MAX_LEN }'`
-    
     NONGAPGENOME=2867459933
-    
     COV=`calc "$REALIGN_PAIRED*$READ_LENGTH/$NONGAPGENOME"`
+    
     echo -e "$SAMPLE\t$REALIGN_PAIRED\t$ORIG_PAIRED\t$DIFF\t$READ_LENGTH\t$COV"
 done > /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/notes/batch1/flagstat_qc.txt
 
+# remove the original BAMs for completed samples
 FLAGSTAT_QC=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/notes/batch1/flagstat_qc.txt
-# remove the completed
 for SAMPLE in `cat $FLAGSTAT_QC | awk '{ if ($2==$3) print $1 }'`
 do
     BAMPATH=`cat $BATCH | grep -m 1 $SAMPLE | cut -f 2`
