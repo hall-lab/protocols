@@ -82,8 +82,7 @@ done >> sort_cmd.sh
 bomb -m 25 -J lsort "bash sort_cmd.sh | bgzip -c > gtex_sorted_2015-04-09.sv.vcf.gz"
 
 # Collapse the variants into merged VCF
-# Warning: we are currently exploring ideal merging parameters.
-# Protocol subject to change.
+# Warning: this section is under active development
 bomb -m 20 -J lmerge.$SLOP \
     "zcat gtex_sorted_2015-04-09.sv.vcf.gz \
         | python -u /gscmnt/gc2719/halllab/users/cchiang/src/lumpy-sv/scripts/l_merge.py -i /dev/stdin -f 10 -p 0.1 \
@@ -97,7 +96,8 @@ done
 # ----------------------------------------
 # Warning: this section is under active development
 
-# 
+# To speed things up, generate a separate VCF for each sample and
+# join them afterwards.
 
 # svtyper: 545e4854085d697de386cbd9c6cadaf689c3ea31
 for SAMPLE in `cat pilot10_samples.txt | cut -f 1`
@@ -105,15 +105,20 @@ do
     BAM=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam
     SPL=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.splitters.bam
     bomb -m 18 -J $SAMPLE.gt -g /cchiang/svtyper -o log/$SAMPLE.%J.log -e log/$SAMPLE.%J.log \
-    "zcat $VCF \
+    "zcat gtex_merged.sv.vcf.gz \
         | vawk --header '{  \$6=\".\"; print }' \
         | /gscmnt/gc2719/halllab/src/svtyper/svtyper \
             -B $BAM \
             -S $SPL \
-        > slop$SLOP/pilot10/$RUN/$SAMPLE.vcf"
+        > $SAMPLE.vcf"
 done
 
-
+# join the samples into a single VCF
+bomb -m 4 -J merge.$SLOP -o slop$SLOP/pilot10/$RUN/log/merge.%J.log -e slop$SLOP/pilot10/$RUN/log/merge.%J.log \
+    "/gscmnt/gc2719/halllab/src/svtyper/scripts/svt_join.py *.vcf \
+        | bgzip -c \
+        > gtex_merged.sv.gt.vcf.gz"
+done
 
 
 
