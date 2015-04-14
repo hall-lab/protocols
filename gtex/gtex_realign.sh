@@ -1,7 +1,8 @@
-## GTEx WGS BAM realignment
-
-```bash
 # 2015-03-18
+
+# ========================================
+# GTEx batch realignment from BAM
+# ========================================
 
 pwd
 # /gscmnt/gc2802/halllab/gtex_realign_2015-03-16
@@ -9,6 +10,7 @@ pwd
 # ----------------------------------------
 # 1. Create the sample map (batch1.txt)
 # ----------------------------------------
+
 # batch 1: 80 samples
 # make the batch
 for BAMPATH in `ls /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/original/*.bam | head -n 80`
@@ -31,7 +33,7 @@ head $BATCH
 # GTEX-O5YW-0003-SM-5JK2Y   /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/original/GTEX-O5YW-0003-SM-5JK2Y.bam
 
 # ----------------------------------------
-# 2. Create directory for each sample
+# 2. Set up sample directories
 # ----------------------------------------
 
 # make some directory paths
@@ -125,6 +127,7 @@ done > /gscmnt/gc2802/halllab/gtex_realign_2015-03-16/notes/batch1/flagstat_qc.t
 # ----------------------------------------
 # 7. Remove the original BAMs for completed samples
 # ----------------------------------------
+
 # Warning: use caution when deleting files
 FLAGSTAT_QC=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/notes/batch1/flagstat_qc.txt
 for SAMPLE in `cat $FLAGSTAT_QC | awk '{ if ($2==$3) print $1 }'`
@@ -134,4 +137,4 @@ do
     
     rm $BAMPATH
 done
-```
+

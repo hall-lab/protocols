@@ -1,7 +1,8 @@
-## GTEx run LUMPY
-
-```bash
 # 2015-04-02
+
+# ========================================
+# Run LUMPY on a batch of GTEx samples
+# ========================================
 
 pwd
 # /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02
@@ -48,4 +49,6 @@ do
             -t 3 \
             -k"
 done
-```
+
+
+
