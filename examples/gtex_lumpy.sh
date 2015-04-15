@@ -108,6 +108,7 @@ do
     "zcat gtex_merged.sv.vcf.gz \
         | vawk --header '{  \$6=\".\"; print }' \
         | /gscmnt/gc2719/halllab/src/svtyper/svtyper \
+            -d \
             -B $BAM \
             -S $SPL \
         > $SAMPLE.vcf"
