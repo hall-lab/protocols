@@ -134,7 +134,6 @@ bomb -m 4 -J paste.gt -o log/paste.gt.%J.log -e log/paste.gt.%J.log \
 # To speed things up, generate a separate VCF for each sample and
 # join them afterwards.
 
-# ------------------------------
 # add copy number information to the VCF
 mkdir -p cn
 for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/merged_2015-04-09/full01_samples.txt`
