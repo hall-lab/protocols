@@ -66,6 +66,7 @@ done > /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/notes
 # 5. Merge SV VCFs
 # ----------------------------------------
 # Warning: this section is under active development
+# l_merge commit: 5e211dacaafd3c9aab1a3d5e7a2373b5280de057
 
 # l_sort cannot yet handle gzipped VCFs so let's unzip them first.
 for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/notes/gtex_batch.txt | cut -f 1`
@@ -85,7 +86,7 @@ bomb -m 25 -J lsort "bash sort_cmd.sh | bgzip -c > gtex_sorted_2015-04-09.sv.vcf
 # Collapse the variants into merged VCF
 bomb -m 20 -J lmerge.$SLOP \
     "zcat gtex_sorted_2015-04-09.sv.vcf.gz \
-        | python -u /gscmnt/gc2719/halllab/users/cchiang/src/lumpy-sv/scripts/l_merge.py -i /dev/stdin -f 10 -p 0.1 \
+        | python -u /gscmnt/gc2719/halllab/users/cchiang/src/lumpy-sv/scripts/l_merge.py -i /dev/stdin -f 20 \
         | bedtools sort -header \
         | bgzip -c \
         > gtex_merged.sv.vcf.gz"
@@ -95,30 +96,51 @@ done
 # 6. Genotype merged VCF with SVTyper
 # ----------------------------------------
 # Warning: this section is under active development
+# svtyper commit: d3a72d8474b5ee4cafc84c7d1989a0891d6f9d1f
 
 # To speed things up, generate a separate VCF for each sample and
 # join them afterwards.
 
-# svtyper: 545e4854085d697de386cbd9c6cadaf689c3ea31
-for SAMPLE in `cat pilot10_samples.txt | cut -f 1`
+# svtyper: e4dfd4e76a7c9bf1013aeabf0630f08ddd964201
+mkdir -p gt
+for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/merged_2015-04-09/full01_samples.txt | cut -f 1`
 do
     BAM=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam
     SPL=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.splitters.bam
-    bomb -m 18 -J $SAMPLE.gt -g /cchiang/svtyper -o log/$SAMPLE.%J.log -e log/$SAMPLE.%J.log \
-    "zcat gtex_merged.sv.vcf.gz \
-        | vawk --header '{  \$6=\".\"; print }' \
-        | /gscmnt/gc2719/halllab/src/svtyper/svtyper \
-            -B $BAM \
-            -S $SPL \
-        > $SAMPLE.vcf"
+    bomb -m 18 -J $SAMPLE.gt -g /cchiang/svtyper -o log/$SAMPLE.gt.%J.log -e log/$SAMPLE.gt.%J.log \
+         "zcat gtex_merged.sv.vcf.gz \
+            | sed 's/##INFO=<ID=EVENT,Number=1,Type=String,Description=\"ID of event associated to breakend\">/##INFO=<ID=EVENT,Number=1,Type=String,Description=\"ID of event associated to breakend\">\n##INFO=<ID=SNAME,Number=.,Type=String,Description=\"Source samples\">/g' \
+            | vawk --header '{  \$6=\".\"; print }' \
+            | /gscmnt/gc2719/halllab/users/cchiang/src/svtyper/svtyper \
+                -B $BAM \
+                -S $SPL \
+            | vawk --header '{\$8=I\$SVTYPE; print }' \
+            > gt/$SAMPLE.vcf"
 done
 
-# join the samples into a single VCF
-bomb -m 4 -J merge.$SLOP -o slop$SLOP/pilot10/$RUN/log/merge.%J.log -e slop$SLOP/pilot10/$RUN/log/merge.%J.log \
-    "/gscmnt/gc2719/halllab/src/svtyper/scripts/svt_join.py *.vcf \
+# paste the samples into a single VCF
+bomb -m 4 -J paste -o log/paste.%J.log -e log/paste.%J.log \
+    "zcat gtex_merged.sv.vcf.gz \
+        | /gscmnt/gc2719/halllab/users/cchiang/src/svtyper/scripts/vcf_group_multiline.py \
+        | /gscmnt/gc2719/halllab/users/cchiang/src/svtyper/scripts/vcf_paste.py \
+              -m - \
+              -q \
+              gt/GTEX-*.vcf \
+        | bedtools sort -header \
         | bgzip -c \
         > gtex_merged.sv.gt.vcf.gz"
-done
+
+# ----------------------------------------
+# 6. Annotate read-depth of VCF variants
+# ----------------------------------------
+# Warning: this section is under active development
+
+# To speed things up, generate a separate VCF for each sample and
+# join them afterwards.
+
+
+
+
 
 
 
