@@ -106,7 +106,6 @@ do
     SPL=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.splitters.bam
     bomb -m 18 -J $SAMPLE.gt -g /cchiang/svtyper -o log/$SAMPLE.gt.%J.log -e log/$SAMPLE.gt.%J.log \
          "zcat gtex_merged.sv.vcf.gz \
-            | sed 's/##INFO=<ID=EVENT,Number=1,Type=String,Description=\"ID of event associated to breakend\">/##INFO=<ID=EVENT,Number=1,Type=String,Description=\"ID of event associated to breakend\">\n##INFO=<ID=SNAME,Number=.,Type=String,Description=\"Source samples\">/g' \
             | vawk --header '{  \$6=\".\"; print }' \
             | /gscmnt/gc2719/halllab/src/svtyper/svtyper \
                 -B $BAM \
