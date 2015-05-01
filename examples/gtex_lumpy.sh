@@ -99,6 +99,7 @@ done
 # join them afterwards.
 
 # svtyper commit: e4dfd4e76a7c9bf1013aeabf0630f08ddd964201
+# COLBY UPDATE THE COMMIT!!
 mkdir -p gt
 for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/merged_2015-04-09/full01_samples.txt | cut -f 1`
 do
@@ -115,7 +116,7 @@ do
 done
 
 # paste the samples into a single VCF
-bomb -m 4 -J paste.gt -o log/paste.gt.%J.log -e log/paste.gt.%J.log \
+bomb -m 20 -J paste.gt -o log/paste.gt.%J.log -e log/paste.gt.%J.log \
     "zcat gtex_merged.sv.vcf.gz \
         | /gscmnt/gc2719/halllab/src/svtyper/scripts/vcf_group_multiline.py \
         | /gscmnt/gc2719/halllab/src/svtyper/scripts/vcf_paste.py \
@@ -161,9 +162,91 @@ bomb -m 4 -J paste.cn -o log/paste.cn.%J.log -e log/paste.cn.%J.log \
         | bgzip -c \
         > gtex_merged.sv.gt.cn.vcf.gz"
 
+# ----------------------------------------
+# 7. Genotype pre-merged SVs to compare counts
+# ----------------------------------------
+mkdir -p pre-merged_gt
+for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/merged_2015-04-09/full01_samples.txt`
+do
+    BAM=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam
+    SPL=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.splitters.bam
+    bomb -m 18 -J $SAMPLE.orig -g /cchiang/svtyper \
+        -o /gscmnt/gc2719/halllab/users/cchiang/projects/gtex//lumpy_2015-04-02/$SAMPLE/log/$SAMPLE.gt_e4dfd4.%J.log \
+        -e /gscmnt/gc2719/halllab/users/cchiang/projects/gtex//lumpy_2015-04-02/$SAMPLE/log/$SAMPLE.gt_e4dfd4.%J.log \
+        "zcat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex//lumpy_2015-04-02/$SAMPLE/$SAMPLE.sv.vcf.gz \
+            | vawk --header '{  \$6=\".\"; print }' \
+            | /gscmnt/gc2719/halllab/users/cchiang/src/svtyper/svtyper \
+                -B $BAM \
+                -S $SPL \
+            | sed 's/PR...=[0-9\.e,-]*\(;\)\{0,1\}\(\t\)\{0,1\}/\2/g' \
+            | bgzip -c \
+            > pre-merged_gt/$SAMPLE.sv.gt.vcf.gz"
+done
 
+# ----------------------------------------
+# 8. Genotype pre-merged SVs to compare counts
+# ----------------------------------------
 
+# count up the pre-merged
+mkdir -p pre-merged_sv_count
+for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/merged_2015-04-09/full01_samples.txt`
+do
+    BAM=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam
+    SM=`sambamba view -H $BAM | grep -m 1 "^@RG" | awk '{ for (i=1;i<=NF;++i) { if ($i~"^SM:") SM=$i; gsub("^SM:","",SM); } print SM }'`
+    bomb -g /cchiang/batch2 -m 2 -J $SAMPLE.svcount \
+        "/gscmnt/gc2719/halllab/users/cchiang/src/svtyper-dev/scripts/sample_stats.sh \
+            pre-merged_gt/$SAMPLE.sv.gt.vcf.gz $SM \
+            > pre-merged_sv_count/$SAMPLE.count.txt"
+done
 
+# consolidate into a single file
+cat pre-merged_sv_count/*.count.txt \
+    | awk '{ print $1,$2,$4+$5 }' OFS="\t" \
+    | groupBy -g 1 -c 3 -o collapse \
+    | tr ',' '\t' \
+    > pre-merged.sv_counts.txt
+
+# count up the post-merged
+mkdir -p sv_count
+for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/merged_2015-04-09/full01_samples.txt`
+do
+    BAM=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam
+    SM=`sambamba view -H $BAM | grep -m 1 "^@RG" | awk '{ for (i=1;i<=NF;++i) { if ($i~"^SM:") SM=$i; gsub("^SM:","",SM); } print SM }'`
+    bomb -g /cchiang/batch2 -m 2 -J $SAMPLE.svcount \
+        "/gscmnt/gc2719/halllab/users/cchiang/src/svtyper-dev/scripts/sample_stats.sh \
+            gt/$SAMPLE.sv.gt.vcf.gz $SM \
+            > sv_count/$SAMPLE.count.txt"
+done
+
+# consolidate into a single file
+cat sv_count/*.count.txt \
+    | awk '{ print $1,$2,$4+$5 }' OFS="\t" \
+    | groupBy -g 1 -c 3 -o collapse \
+    | tr ',' '\t' \
+    > post-merged.sv_counts.txt
+
+# ----------------------------------------
+# 9. Plot the SV counts in R before and after merging
+# ----------------------------------------
+
+# R code:
+
+col.list <- c('indianred3', 'dodgerblue3', 'goldenrod1', 'gray')
+before <- read.table('../data/merged_2015-04-23/pre-merged.sv_counts.txt')
+after <- read.table('../data/merged_2015-04-23/post-merged.sv_counts.txt')
+
+# before
+pdf('../plots/pre-merged_sv_count.pdf', height=5, width=14)
+barplot(t(data.matrix(before[,2:ncol(before)])), col=col.list, las=3, cex.names=0.6, main="Before merging\nnumber of SVs per sample by type", ylab='Number of SVs', ylim=c(0,9000), xlab='Samples')
+legend('topleft', c('Deletions', 'Tandem duplications', 'Inversions', 'Unknown'), fill=col.list, bty='n')
+dev.off()
+
+# after
+pdf('../plots/post-merged_sv_count.pdf', height=5, width=14)
+barplot(t(data.matrix(after[,2:ncol(after)])), col=col.list, las=3, cex.names=0.6, main="After merging\nnumber of SVs per sample by type", ylab='Number of SVs', ylim=c(0,9000), xlab='Samples')
+dev.off()
+
+# end R code
 
 
 
