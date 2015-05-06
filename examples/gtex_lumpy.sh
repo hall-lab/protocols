@@ -135,19 +135,20 @@ bomb -m 20 -J paste.gt -o log/paste.gt.%J.log -e log/paste.gt.%J.log \
 
 # add copy number information to the VCF
 mkdir -p cn
+source /gsc/pkg/root/root/bin/thisroot.sh
+VCF=gtex_merged.sv.gt.vcf
 for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/merged_2015-04-09/full01_samples.txt`
 do
     ROOT=/gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/$SAMPLE/temp/cnvnator-temp/$SAMPLE.bam.hist.root
     BAM=/gscmnt/gc2802/halllab/gtex_realign_2015-03-16/$SAMPLE/$SAMPLE.bam
     SM=`sambamba view -H $BAM | grep -m 1 "^@RG" | awk '{ for (i=1;i<=NF;++i) { if ($i~"^SM:") SM=$i; gsub("^SM:","",SM); } print SM }'`
     bomb -q hall-lab -g /cchiang/svtyper -m 6 -J $SAMPLE.cn -o log/$SAMPLE.cn.%J.log -e log/$SAMPLE.cn.%J.log \
-         "bash /gscmnt/gc2719/halllab/bin/speedseq.config &&
-         /gscmnt/gc2719/halllab/bin/gemini_python /gscmnt/gc2719/halllab/src/speedseq/bin/annotate_rd.py \
+         "/gscmnt/gc2719/halllab/bin/gemini_python /gscmnt/gc2719/halllab/src/speedseq/bin/annotate_rd.py \
              --cnvnator /gscmnt/gc2719/halllab/src/speedseq/bin/cnvnator-multi \
              -s $SM \
              -w 100 \
              -r $ROOT \
-             -v gtex_merged.sv.gt.vcf \
+             -v $VCF \
          | vawk --header '{ print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\"NULL\",\$9,S\$$SM }' \
          | sed \"s/#CHROM.*/#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t$SM/g\" \
          > cn/$SAMPLE.vcf"
