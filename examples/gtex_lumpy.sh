@@ -110,7 +110,7 @@ do
             | /gscmnt/gc2719/halllab/src/svtyper/svtyper \
                 -B $BAM \
                 -S $SPL \
-            | vawk --header '{\$8=I\$SVTYPE; print }' \
+            | sed 's/PR...=[0-9\.e,-]*\(;\)\{0,1\}\(\t\)\{0,1\}/\2/g' - \
             > gt/$SAMPLE.vcf"
 done
 
