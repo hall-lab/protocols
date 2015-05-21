@@ -28,7 +28,6 @@ do
     echo $SAMPLE
     bomb \
         -g /cchiang/lumpy \
-        -x hall15 \
         -m 20 \
         -J $SAMPLE.lumpy \
         -o /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/$SAMPLE/log/$SAMPLE.lumpy.log \
