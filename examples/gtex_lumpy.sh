@@ -73,7 +73,7 @@ do
 done
 
 # concatenate and sort the variants
-echo -n /gscmnt/gc2719/halllab/users/cchiang/src/lumpy-sv/scripts/l_sort.py > sort_cmd.sh
+echo -n /gscmnt/gc2719/halllab/src/lumpy-sv/scripts/l_sort.py > sort_cmd.sh
 for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/merged_2015-04-09/merge_sample_list.txt`
 do
     echo -ne " \\\\\n\t/gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/$SAMPLE/$SAMPLE.sv.vcf"
@@ -83,7 +83,7 @@ bomb -m 25 -J lsort "bash sort_cmd.sh | bgzip -c > gtex_sorted_2015-04-09.sv.vcf
 # Collapse the variants into merged VCF
 bomb -m 20 -J lmerge.$SLOP \
     "zcat gtex_sorted_2015-04-09.sv.vcf.gz \
-        | python -u /gscmnt/gc2719/halllab/users/cchiang/src/lumpy-sv/scripts/l_merge.py -i /dev/stdin -f 20 \
+        | python -u /gscmnt/gc2719/halllab/src/lumpy-sv/scripts/l_merge.py -i /dev/stdin -f 20 \
         | bedtools sort -header \
         | bgzip -c \
         > gtex_merged.sv.vcf.gz"
