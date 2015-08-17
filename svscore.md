@@ -1,4 +1,5 @@
 ## Run SVScore
+```
 bomb -m 8 \
 "/gscmnt/gc2719/halllab/users/lganel/SVScore/svscore.pl \
     -g /gscmnt/gc2719/halllab/users/lganel/SVScore/gencode.v19.genes.bed \
@@ -9,3 +10,4 @@ bomb -m 8 \
     input.vcf \
     | bgzip -c \
     > out.vcf.gz"
+```
