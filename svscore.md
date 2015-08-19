@@ -5,7 +5,7 @@ bomb -m 8 \
     -g /gscmnt/gc2719/halllab/users/lganel/SVScore/gencode.v19.genes.bed \
     -e /gscmnt/gc2719/halllab/users/lganel/SVScore/gencode.v19.exons.bed \
     -n 4 \
-    -c /gscmnt/gc2719/halllab/users/lganel/SVScore/whole_genome_SNVs.tsv.gz \
+    -c /gscmnt/gc2719/halllab/users/lganel/sharedfiles/whole_genome_SNVs.tsv.gz \
     -o max \
     input.vcf \
     | bgzip -c \
