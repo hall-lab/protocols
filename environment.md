@@ -142,4 +142,18 @@ export PS1='[\u@\h \W]\$ '
 # also, use zless to open gzipped files
 LESS="-SMi"
 alias less='zless'
+
+# display colors with `ls`
+alias ls='ls --color'
+
+# make the `ls` colors more readable on a black background
+export LS_COLORS="di=01;37;44:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32"
+LS_COLORS=$LS_COLORS:'*.tar=01;31'  # tar Archive             = Bold, Red
+LS_COLORS=$LS_COLORS:'*.tgz=01;31'  # tar/gzip Archive        = Bold, Red
+LS_COLORS=$LS_COLORS:'*.tbz2=01;31' # tar/bzip2 Archive       = Bold, Red
+LS_COLORS=$LS_COLORS:'*.Z=01;31'    # compress Archive        = Bold, Red
+LS_COLORS=$LS_COLORS:'*.gz=01;31'   # gzip Archive            = Bold, Red
+LS_COLORS=$LS_COLORS:'*.bz2=01;31'  # bzip2 Archive           = Bold, Red
+LS_COLORS=$LS_COLORS:'*.zip=01;31'  # zip Archive             = Bold, Red
+LS_COLORS=$LS_COLORS:'*.dmg=01;31'  # Disk Image              = Bold, Red
 ```
