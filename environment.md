@@ -3,27 +3,25 @@
 ## Log in to the MGI cluster
 
 1. Jump box log in
-```bash
-# Log in to the jump box
-ssh username@ssh-jump-1.gsc.wustl.edu
-# username@ssh-jump-1.gsc.wustl.edu's password: [Enter your password]
-
-# Open an interactive node for processing
-open64
-# bsub -XF -Is -q interactive -R 'select[type==LINUX64]' /bin/bash
-# Job <9399510> is submitted to queue <interactive>.
-# <<ssh X11 forwarding job>>
-# <<Waiting for dispatch ...>>
-# <<Starting on blade14-2-4.gsc.wustl.edu>>
-```
-
+  ```bash
+  # Log in to the jump box
+  ssh username@ssh-jump-1.gsc.wustl.edu
+  # username@ssh-jump-1.gsc.wustl.edu's password: [Enter your password]
+  
+  # Open an interactive node for processing
+  open64
+  # bsub -XF -Is -q interactive -R 'select[type==LINUX64]' /bin/bash
+  # Job <9399510> is submitted to queue <interactive>.
+  # <<ssh X11 forwarding job>>
+  # <<Waiting for dispatch ...>>
+  # <<Starting on blade14-2-4.gsc.wustl.edu>>
+  ```
 2. Log in directly to a Hall lab server.
-```bash
-# hall13, hall14, hall15, hall16 are the Hall lab blades.
-ssh username@hall13.gsc.wustl.edu
-# username@hall13.gsc.wustl.edu's password: [Enter your password]
-
-```
+  ```bash
+  # hall13, hall14, hall15, hall16 are the Hall lab blades.
+  ssh username@hall13.gsc.wustl.edu
+  # username@hall13.gsc.wustl.edu's password: [Enter your password]
+  ```
 
 ## Sourcing executables
 Add the following line to `~/.bashrc`
@@ -134,7 +132,7 @@ This allows you to type `ssh user@hall16` rather than `ssh user@hall16.gsc.wustl
 
 ## Useful `.bashrc` lines
 
-```sh
+```bash
 # terminal prompt as [username@blade14-4-10 current-dir]$
 export PS1='[\u@\h \W]\$ '
 
