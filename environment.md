@@ -132,6 +132,8 @@ This allows you to type `ssh user@hall16` rather than `ssh user@hall16.gsc.wustl
 
 ## Useful `.bashrc` lines
 
+Add any or all of these to your `~/.bashrc` file to customize your environment
+
 ```bash
 # terminal prompt as [username@blade14-4-10 current-dir]$
 export PS1='[\u@\h \W]\$ '
@@ -141,10 +143,10 @@ export PS1='[\u@\h \W]\$ '
 LESS="-SMi"
 alias less='zless'
 
-# display colors with `ls`
+# display colors with "ls"
 alias ls='ls --color'
 
-# make the `ls` colors more readable on a black background
+# make the "ls" colors more readable on a black background
 export LS_COLORS="di=01;37;44:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32"
 LS_COLORS=$LS_COLORS:'*.tar=01;31'  # tar Archive             = Bold, Red
 LS_COLORS=$LS_COLORS:'*.tgz=01;31'  # tar/gzip Archive        = Bold, Red
@@ -154,4 +156,7 @@ LS_COLORS=$LS_COLORS:'*.gz=01;31'   # gzip Archive            = Bold, Red
 LS_COLORS=$LS_COLORS:'*.bz2=01;31'  # bzip2 Archive           = Bold, Red
 LS_COLORS=$LS_COLORS:'*.zip=01;31'  # zip Archive             = Bold, Red
 LS_COLORS=$LS_COLORS:'*.dmg=01;31'  # Disk Image              = Bold, Red
+
+# human readable directory listing sorted by recently modified
+alias l='ls -lhtr'
 ```
