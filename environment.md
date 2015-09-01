@@ -134,6 +134,7 @@ This allows you to type `ssh user@hall16` rather than `ssh user@hall16.gsc.wustl
 
 ## Useful `.bashrc` lines
 
+```sh
 # terminal prompt as [username@blade14-4-10 current-dir]$
 export PS1='[\u@\h \W]\$ '
 
@@ -141,5 +142,4 @@ export PS1='[\u@\h \W]\$ '
 # also, use zless to open gzipped files
 LESS="-SMi"
 alias less='zless'
-
-
+```
