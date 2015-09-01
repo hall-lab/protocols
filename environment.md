@@ -57,7 +57,9 @@ export PATH=/gscmnt/gc2719/halllab/bin:$PATH
 
 ## Useful `.bashrc` lines
 
-Add any or all of these to your `~/.bashrc` file to customize your environment
+Add any or all of these to your `~/.bashrc` file to customize your environment.
+The system will automatically run this file each time you log on. If you modify it,
+your changes will appear after logging out and back in, or after you run `source ~/.bashrc`.
 
 ```bash
 # terminal prompt as [username@blade14-4-10 current-dir]$
