@@ -51,10 +51,9 @@ You are free to organize the contents of that directory as desired. However, we
 recommend the following organizational structure:
 
 - projects
-  - this directory contains different analysis projects, generally organized
-  into separate publications
+  - different analysis projects, generally organized into separate publications
 - src
-  - contains external software as well as internal source code and git repositories
+  - external software as well as internal source code and git repositories
 - bin
   - executable files that are symbolic linked to binaries in the `src` directory
 
