@@ -16,6 +16,7 @@
   # <<Waiting for dispatch ...>>
   # <<Starting on blade14-2-4.gsc.wustl.edu>>
   ```
+
 2. Log in directly to a Hall lab server.
   ```bash
   # hall13, hall14, hall15, hall16 are the Hall lab blades.
