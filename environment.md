@@ -3,7 +3,6 @@
 ## Log in to the MGI cluster
 
 1. Jump box log in
-
 ```bash
 # Log in to the jump box
 ssh username@ssh-jump-1.gsc.wustl.edu
@@ -19,7 +18,6 @@ open64
 ```
 
 2. Log in directly to a Hall lab server.
-
 ```bash
 # hall13, hall14, hall15, hall16 are the Hall lab blades.
 ssh username@hall13.gsc.wustl.edu
@@ -48,7 +46,7 @@ mkdir -p username
 ```
 
 You are free to organize the contents of that directory as desired. However, we
-recommend the following organizational structure:
+recommend the following structure:
 
 - projects
   - this directory contains different analysis projects, generally organized
@@ -72,7 +70,7 @@ ssh-keygen -t rsa
 # Enter passphrase (empty for no passphrase):
 # Enter same passphrase again:
 # Your identification has been saved in /Users/username/.ssh/id_rsa.
-# Your public key has been saved in /Users/cchiang/.ssh/id_rsa.pub.
+# Your public key has been saved in /Users/username/.ssh/id_rsa.pub.
 # The key fingerprint is:
 # y8:20:3f:z9:ab:31:c9:94:3b:kc:e4:0d:4c:dd:3c:f9 username@laptop.local
 # The key's randomart image is:
@@ -134,5 +132,15 @@ This allows you to type `ssh user@hall16` rather than `ssh user@hall16.gsc.wustl
 3. Navigate to the "DNS" tab, click the "+" button and add "gsc.wustl.edu" to your search domains  
 ![Network 3](etc/figures/network03.png?raw=true "Network 3")
 
+
+## Useful `.bashrc` lines
+
+# terminal prompt as [username@blade14-4-10 current-dir]$
+export PS1='[\u@\h \W]\$ '
+
+# For less, don't fold long lines (-S), show detailed line data (-M), ignore case when searching (-i)
+# also, use zless to open gzipped files
+LESS="-SMi"
+alias less='zless'
 
 
