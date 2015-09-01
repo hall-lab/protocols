@@ -4,7 +4,7 @@
 
 1. Jump box log in
 
-```
+```bash
 # Log in to the jump box
 ssh username@ssh-jump-1.gsc.wustl.edu
 # username@ssh-jump-1.gsc.wustl.edu's password: [Enter your password]
@@ -20,7 +20,7 @@ open64
 
 2. Log in directly to a Hall lab server.
 
-```
+```bash
 # hall13, hall14, hall15, hall16 are the Hall lab blades.
 ssh username@hall13.gsc.wustl.edu
 # username@hall13.gsc.wustl.edu's password: [Enter your password]
@@ -30,7 +30,7 @@ ssh username@hall13.gsc.wustl.edu
 ## Sourcing executables
 Add the following line to `~/.bashrc`
 
-```
+```bash
 export PATH=/gscmnt/gc2719/halllab/bin:$PATH
 ```
 
@@ -42,7 +42,7 @@ and user directories.
 
 Please create a directory for yourself in `/gscmnt/gc2719/halllab`, using your
 first initial and last name as your username.
-```
+```bash
 cd /gscmnt/gc2719/halllab/username
 mkdir -p username
 ```
@@ -63,7 +63,7 @@ By default, you are required to enter in your password each time you access the 
 To save time, you can grant password-less access for your lab computer with RSA keys.
 
 On your laptop:
-```
+```bash
 cd ~/.ssh/
 
 ssh-keygen -t rsa
@@ -97,7 +97,7 @@ chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 ```
 
 On the MGI cluster:
-```
+```bash
 mkdir -p ~/.ssh
 cd ~/.ssh
 
@@ -112,12 +112,12 @@ chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 
 ## Transferring files between the cluster and your computer
 Transfer from the cluster to your computer
-```
+```bash
 rsync -avl hall16:/remote/path/to/file.txt ~/local/path/.
 ```
 
 Transfer from your computer to the cluster
-```
+```bash
 rsync -avl ~/local/path/to/file.txt  hall16:/remote/path/.
 ```
 
@@ -125,13 +125,13 @@ rsync -avl ~/local/path/to/file.txt  hall16:/remote/path/.
 
 This allows you to type `ssh user@hall16` rather than `ssh user@hall16.gsc.wustl.edu` when logging in.
 
-1. Navigate to the "Network" preference pane on your computer
+1. Navigate to the "Network" preference pane on your computer  
 ![Network 1](etc/figures/network01.png?raw=true "Network 1")
 
-2. Select "Advanced..."
+2. Select "Advanced..."  
 ![Network 2](etc/figures/network02.png?raw=true "Network 2")
 
-3. Navigate to the "DNS" tab, click the "+" button and add "gsc.wustl.edu" to your search domains
+3. Navigate to the "DNS" tab, click the "+" button and add "gsc.wustl.edu" to your search domains  
 ![Network 3](etc/figures/network03.png?raw=true "Network 3")
 
 
