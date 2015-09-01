@@ -23,13 +23,6 @@
   # username@hall13.gsc.wustl.edu's password: [Enter your password]
   ```
 
-## Sourcing executables
-Add the following line to `~/.bashrc`
-
-```bash
-export PATH=/gscmnt/gc2719/halllab/bin:$PATH
-```
-
 ## Hall lab directory setup
 
 The Hall lab directory on the cluster is located at `/gscmnt/gc2719/halllab`.
@@ -52,6 +45,56 @@ recommend the following structure:
   - external software as well as internal source code and git repositories
 - bin
   - executable files that are symbolic linked to binaries in the `src` directory
+
+
+## Sourcing executables
+Add the following line to `~/.bashrc`
+
+```bash
+export PATH=/gscmnt/gc2719/halllab/bin:$PATH
+```
+
+## Useful `.bashrc` lines
+
+Add any or all of these to your `~/.bashrc` file to customize your environment
+
+```bash
+# terminal prompt as [username@blade14-4-10 current-dir]$
+export PS1='[\u@\h \W]\$ '
+
+# For less, don't fold long lines (-S), show detailed line data (-M), ignore case when searching (-i)
+# also, use zless to open gzipped files
+LESS="-SMi"
+alias less='zless'
+
+# display colors with "ls"
+alias ls='ls --color'
+
+# make the "ls" colors more readable on a black background
+export LS_COLORS="di=01;37;44:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32"
+LS_COLORS=$LS_COLORS:'*.tar=01;31'  # tar Archive             = Bold, Red
+LS_COLORS=$LS_COLORS:'*.tgz=01;31'  # tar/gzip Archive        = Bold, Red
+LS_COLORS=$LS_COLORS:'*.tbz2=01;31' # tar/bzip2 Archive       = Bold, Red
+LS_COLORS=$LS_COLORS:'*.Z=01;31'    # compress Archive        = Bold, Red
+LS_COLORS=$LS_COLORS:'*.gz=01;31'   # gzip Archive            = Bold, Red
+LS_COLORS=$LS_COLORS:'*.bz2=01;31'  # bzip2 Archive           = Bold, Red
+LS_COLORS=$LS_COLORS:'*.zip=01;31'  # zip Archive             = Bold, Red
+LS_COLORS=$LS_COLORS:'*.dmg=01;31'  # Disk Image              = Bold, Red
+
+# human readable directory listing sorted by recently modified
+alias l='ls -lhtr'
+```
+
+## Transferring files between the cluster and your computer
+Transfer from the cluster to your computer
+```bash
+rsync -avl hall16:/remote/path/to/file.txt ~/local/path/.
+```
+
+Transfer from your computer to the cluster
+```bash
+rsync -avl ~/local/path/to/file.txt  hall16:/remote/path/.
+```
 
 ## Password-less log in
 By default, you are required to enter in your password each time you access the cluster.
@@ -105,17 +148,6 @@ chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 
 ```
 
-## Transferring files between the cluster and your computer
-Transfer from the cluster to your computer
-```bash
-rsync -avl hall16:/remote/path/to/file.txt ~/local/path/.
-```
-
-Transfer from your computer to the cluster
-```bash
-rsync -avl ~/local/path/to/file.txt  hall16:/remote/path/.
-```
-
 ## Automatically search GSC domains
 
 This allows you to type `ssh user@hall16` rather than `ssh user@hall16.gsc.wustl.edu` when logging in.
@@ -128,35 +160,3 @@ This allows you to type `ssh user@hall16` rather than `ssh user@hall16.gsc.wustl
 
 3. Navigate to the "DNS" tab, click the "+" button and add "gsc.wustl.edu" to your search domains  
 ![Network 3](etc/figures/network03.png?raw=true "Network 3")
-
-
-## Useful `.bashrc` lines
-
-Add any or all of these to your `~/.bashrc` file to customize your environment
-
-```bash
-# terminal prompt as [username@blade14-4-10 current-dir]$
-export PS1='[\u@\h \W]\$ '
-
-# For less, don't fold long lines (-S), show detailed line data (-M), ignore case when searching (-i)
-# also, use zless to open gzipped files
-LESS="-SMi"
-alias less='zless'
-
-# display colors with "ls"
-alias ls='ls --color'
-
-# make the "ls" colors more readable on a black background
-export LS_COLORS="di=01;37;44:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32"
-LS_COLORS=$LS_COLORS:'*.tar=01;31'  # tar Archive             = Bold, Red
-LS_COLORS=$LS_COLORS:'*.tgz=01;31'  # tar/gzip Archive        = Bold, Red
-LS_COLORS=$LS_COLORS:'*.tbz2=01;31' # tar/bzip2 Archive       = Bold, Red
-LS_COLORS=$LS_COLORS:'*.Z=01;31'    # compress Archive        = Bold, Red
-LS_COLORS=$LS_COLORS:'*.gz=01;31'   # gzip Archive            = Bold, Red
-LS_COLORS=$LS_COLORS:'*.bz2=01;31'  # bzip2 Archive           = Bold, Red
-LS_COLORS=$LS_COLORS:'*.zip=01;31'  # zip Archive             = Bold, Red
-LS_COLORS=$LS_COLORS:'*.dmg=01;31'  # Disk Image              = Bold, Red
-
-# human readable directory listing sorted by recently modified
-alias l='ls -lhtr'
-```
