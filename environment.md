@@ -34,7 +34,7 @@ It contains user directories, shared data files (such as genomes and annotations
 Please create a directory for yourself in `/gscmnt/gc2719/halllab`, using your
 first initial and last name as your username.
 ```bash
-cd /gscmnt/gc2719/halllab/username
+cd /gscmnt/gc2719/halllab
 mkdir -p username
 ```
 
