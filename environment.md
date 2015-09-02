@@ -48,7 +48,7 @@ recommend the following structure:
 - bin
   - executable files that are symbolic linked to binaries in the `src` directory
 - scratch
-  - uncategorize and temporary analyses
+  - uncategorized and temporary analyses
 
 ## Sourcing executables
 Add the following line to `~/.bashrc`
