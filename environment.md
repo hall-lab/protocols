@@ -2,7 +2,9 @@
 
 ## Log in to the MGI cluster
 
-1. Jump box log in
+You can log in to the cluster in one of two ways:
+
+1. Jump box log in. This is preferred for navigating the file system, low-level processing, and launching LSF jobs. Useful when the hall nodes (hall13, hall14, hall15, hall16) are busy.
   ```bash
   # Log in to the jump box
   ssh username@ssh-jump-1.gsc.wustl.edu
@@ -17,7 +19,7 @@
   # <<Starting on blade14-2-4.gsc.wustl.edu>>
   ```
 
-2. Log in directly to a Hall lab server.
+2. Log in directly to a Hall lab server. This is preferred for running memory- or compute-intensive interactive tasks. Be cautious of overloading the node though, as it may be hosting LSF jobs or interactive jobs from other users.
   ```bash
   # hall13, hall14, hall15, hall16 are the Hall lab blades.
   ssh username@hall13.gsc.wustl.edu
@@ -27,8 +29,7 @@
 ## Hall lab directory setup
 
 The Hall lab directory on the cluster is located at `/gscmnt/gc2719/halllab`.
-It contains shared data files (e.g.: genomes, annotations), shared software,
-and user directories.
+It contains user directories, shared data files (such as genomes and annotations), and shared software.
 
 Please create a directory for yourself in `/gscmnt/gc2719/halllab`, using your
 first initial and last name as your username.
@@ -41,12 +42,13 @@ You are free to organize the contents of that directory as desired. However, we
 recommend the following structure:
 
 - projects
-  - different analysis projects, generally organized into separate publications
+  - analysis projects, generally organized into separate publications
 - src
   - external software as well as internal source code and git repositories
 - bin
   - executable files that are symbolic linked to binaries in the `src` directory
-
+- scratch
+  - uncategorize and temporary analyses
 
 ## Sourcing executables
 Add the following line to `~/.bashrc`
@@ -88,7 +90,7 @@ LS_COLORS=$LS_COLORS:'*.dmg=01;31'  # Disk Image              = Bold, Red
 alias l='ls -lhtr'
 ```
 
-## Transferring files between the cluster and your computer
+## Transferring data between the cluster and your computer
 Transfer from the cluster to your computer
 ```bash
 rsync -avl hall16:/remote/path/to/file.txt ~/local/path/.
@@ -152,7 +154,6 @@ chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 ```
 
 ## Automatically search GSC domains
-
 This allows you to type `ssh user@hall16` rather than `ssh user@hall16.gsc.wustl.edu` when logging in.
 
 1. Navigate to the "Network" preference pane on your computer  
