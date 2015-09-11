@@ -11,3 +11,6 @@ bomb -m 8 \
     | bgzip -c \
     > out.vcf.gz"
 ```
+
+## With parallelization
+`sh runsvscore.sh input.vcf`

@@ -78,9 +78,6 @@ export PS1='[\u@\h \W]\$ '
 LESS="-SMi"
 alias less='zless'
 
-# display colors with "ls"
-alias ls='ls --color'
-
 # make the "ls" colors more readable on a black background
 export LS_COLORS="di=01;37;44:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32"
 LS_COLORS=$LS_COLORS:'*.tar=01;31'  # tar Archive             = Bold, Red
@@ -93,7 +90,7 @@ LS_COLORS=$LS_COLORS:'*.zip=01;31'  # zip Archive             = Bold, Red
 LS_COLORS=$LS_COLORS:'*.dmg=01;31'  # Disk Image              = Bold, Red
 
 # human readable directory listing sorted by recently modified
-alias l='ls -lhtr'
+alias l='ls --color -lhtr'
 ```
 
 ## Transferring data between the cluster and your computer
