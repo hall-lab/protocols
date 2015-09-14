@@ -14,3 +14,10 @@ bomb -m 8 \
 
 ## With parallelization
 `sh runsvscore.sh input.vcf`
+
+After all jobs finish, combine into one:
+```
+grep '^#' split00.out.vcf > header
+cat *.out.vcf | grep –v '^#' | sort –k1,1 –k2,2n | cat header - > final.vcf
+rm –f header
+```
