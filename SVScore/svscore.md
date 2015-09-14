@@ -13,7 +13,10 @@ bomb -m 8 \
 ```
 
 ## With parallelization
-`sh runsvscore.sh input.vcf`
+First, modify the contents of generatesvscorecalls.pl to reflect the desired usage of SVScore. Make the desired changes in the split00.vcf line (line 9 as of 9/14/15) and the print statement in the foreach loop (line 13 as of 9/14/15). Then,
+```
+sh runsvscore.sh input.vcf
+```
 
 After all jobs finish, combine into one:
 ```
