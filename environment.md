@@ -50,6 +50,12 @@ recommend the following structure:
 - scratch
   - uncategorized and temporary analyses
 
+You can create the above directories with the following command:
+```
+cd /gscmnt/gc2719/halllab/username
+mkdir -p projects src bin scratch
+```
+
 ## Sourcing executables
 Add the following line to `~/.bashrc`
 
