@@ -63,7 +63,7 @@ done > /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/notes
 # 5. Merge SV VCFs
 # ----------------------------------------
 # Warning: this section is under active development
-# l_merge commit: 5e211dacaafd3c9aab1a3d5e7a2373b5280de057
+# l_merge commit: 1a650fb8bc505698b716ee31a04391f63716ef38
 
 # l_sort cannot yet handle gzipped VCFs so let's unzip them first.
 for SAMPLE in `cat /gscmnt/gc2719/halllab/users/cchiang/projects/gtex/lumpy_2015-04-02/notes/gtex_batch.txt | cut -f 1`
@@ -83,7 +83,7 @@ bomb -m 25 -J lsort "bash sort_cmd.sh | bgzip -c > gtex_sorted_2015-04-09.sv.vcf
 # Collapse the variants into merged VCF
 bomb -m 20 -J lmerge.$SLOP \
     "zcat gtex_sorted_2015-04-09.sv.vcf.gz \
-        | python -u /gscmnt/gc2719/halllab/src/lumpy-sv/scripts/l_merge.py -i /dev/stdin -f 20 \
+        | python -u /gscmnt/gc2719/halllab/src/lumpy-sv/scripts/l_merge.py -i /dev/stdin --product -f 20 \
         | bedtools sort -header \
         | bgzip -c \
         > gtex_merged.sv.vcf.gz"
