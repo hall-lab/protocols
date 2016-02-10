@@ -60,7 +60,7 @@ mkdir -p projects src bin scratch
 Add the following line to `~/.bashrc`
 
 ```bash
-export PATH=/gscmnt/gc2719/halllab/bin:$PATH
+export PATH=/gscmnt/gc2719/halllab/bin:/gscmnt/gc2719/halllab/src/anaconda-2.0.1/bin:$PATH
 ```
 
 ## Useful `.bashrc` lines
