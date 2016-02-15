@@ -7,6 +7,7 @@ bomb -t 8 -m 48 \
         -t 8 \
         -M 8 \
         -v \
+        -R "@RG\tID:rg.id\tSM:rg.sample\tLB:rg.lib" \
         /gscmnt/gc2719/halllab/genomes/human/GRCh37/hs37_ebv/hs37_ebv.fasta \
         s1.fastq.gz \
         s2.fastq.gz"
@@ -22,6 +23,7 @@ bomb -t 8 -m 48 \
         -M 8 \
         -p \
         -v \
+        -R "@RG\tID:rg.id\tSM:rg.sample\tLB:rg.lib" \
         /gscmnt/gc2719/halllab/genomes/human/GRCh37/hs37_ebv/hs37_ebv.fasta \
         interleaved.fastq.gz"
 ```
