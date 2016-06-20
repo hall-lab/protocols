@@ -11,10 +11,12 @@ cd SVScore-0.5.1/
 
 #### Other annotations
 To use other annotations, you have two options as described in the README:
+
 1. Use `generateannotations.pl`
    * Generate a single annotation track with columns for chromosome, traanscript start, transcript stop, transcript strand, transcript name, exon start positions (comma-delimited), and exon stop positions (comma-delimited).
    * Run `generateannotations.pl`, specifying each column number using the command line options (run `generateannotations.pl --help` to see options)
    * When running SVScore, provide the names of the annotation files generated using -e (for the exon file) and -f (for the intron file)
+
 2. Create annotation files manually
    * If you do this, make sure each line represents a transcript with a unique name
    * Exon file should have the following columns, in order:
