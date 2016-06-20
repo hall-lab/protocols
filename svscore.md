@@ -36,3 +36,5 @@ To use other annotations, you have two options as described in the README:
 
 ## Running SVScore
 `./svscore.pl -c /gscmnt/gc2719/halllab/lganel/sharedfiles/whole_genome_SNVs.tsv.gz [-e filename.exons.bed -f filename.introns.bed] -i /path/to/file.vcf | bgzip -c > outputfile.vcf`
+
+If running SVScore from outside the installation directory, use `/path/to/installation/svscore.pl -h /path/to/installation ...` or SVScore will throw an error
