@@ -1,26 +1,36 @@
-## Run SVScore
+## Set up SVScore
 ```
-bomb -m 8 \
-"/gscmnt/gc2719/halllab/users/lganel/SVScore/svscore.pl \
-    -g /gscmnt/gc2719/halllab/users/lganel/SVScore/gencode.v19.genes.bed \
-    -e /gscmnt/gc2719/halllab/users/lganel/SVScore/gencode.v19.exons.bed \
-    -n 4 \
-    -c /gscmnt/gc2719/halllab/users/lganel/sharedfiles/whole_genome_SNVs.tsv.gz \
-    -o max \
-    input.vcf \
-    | bgzip -c \
-    > out.vcf.gz"
+wget https://github.com/lganel/SVScore/archive/v0.5.1.tar.gz
+tar -xzvf v0.5.1.tar.gz
+rm -f v0.5.1.tar.gz
+cd SVScore-0.5.1/
 ```
 
-## With parallelization
-First, modify the contents of generatesvscorecalls.pl to reflect the desired usage of SVScore. Make the desired changes in the split00.vcf line (line 9 as of 9/14/15) and the print statement in the foreach loop (line 13 as of 9/14/15). Then,
-```
-sh runsvscore.sh input.vcf
-```
+#### refGene annotations
+`./generateannotations.pl`
 
-After all jobs finish, combine into one:
-```
-grep '^#' split00.out.vcf > header
-cat *.out.vcf | grep –v '^#' | sort –k1,1 –k2,2n | cat header - > final.vcf
-rm –f header
-```
+#### Other annotations
+To use other annotations, you have two options as described in the README:
+1. Use `generateannotations.pl`
+   * Generate a single annotation track with columns for chromosome, traanscript start, transcript stop, transcript strand, transcript name, exon start positions (comma-delimited), and exon stop positions (comma-delimited).
+   * Run `generateannotations.pl`, specifying each column number using the command line options (run `generateannotations.pl --help` to see options)
+   * When running SVScore, provide the names of the annotation files generated using -e (for the exon file) and -f (for the intron file)
+2. Create annotation files manually
+   * If you do this, make sure each line represents a transcript with a unique name
+   * Exon file should have the following columns, in order:
+     * 1 - Exon chromosome
+     * 2 - Exon start
+     * 3 - Exon stop
+     * 4 - Transcript name
+     * 5 - Transcript start
+     * 6 - Transcript stop
+     * 7 - Transcript strand
+   * Intron file should have the following columns, in order:
+     * 1 - Intron chromosome
+     * 2 - Intron start
+     * 3 - Intron stop
+     * 4 - Transcript name
+     * 5 - Intron number (arbitrary, but must be unique. Line number works well)
+
+## Running SVScore
+`./svscore.pl -c /gscmnt/gc2719/halllab/lganel/sharedfiles/whole_genome_SNVs.tsv.gz [-e filename.exons.bed -f filename.introns.bed] -i /path/to/file.vcf | bgzip -c > outputfile.vcf`
